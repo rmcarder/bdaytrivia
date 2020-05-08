@@ -10,6 +10,13 @@
 
   <title>It's Anna's Special Day!</title>
 
+  <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery.csv.js"></script>
+   
+      <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://d3js.org/d3.v4.js"></script>
+
   <!-- Bootstrap Core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
@@ -20,6 +27,55 @@
 
   <!-- Custom CSS -->
   <link href="css/stylish-portfolio.min.css" rel="stylesheet">
+
+  <script type="text/javascript">
+
+      const addRow = (cellsObject, header=false) => {
+          if (!document.getElementsByTagName) return;
+          tabBody = document.getElementsByTagName(header ? "thead" : "tbody").item(0);
+          row = document.createElement("tr");
+          const headers = Object.keys(cellsObject);
+          cells = header ? headers : Object.values(cellsObject);
+
+          cells.forEach((cellContent, idx) => {
+            cell = document.createElement(header ? "th" : "td");
+            let contentNode;
+            if (cellContent.includes('http')) {
+              contentNode = document.createElement('a');
+              contentNode.setAttribute('href', cellContent);
+              linkTextNode = document.createTextNode(headers[idx]);
+              contentNode.appendChild(linkTextNode);
+            } else {
+              contentNode = document.createTextNode(cellContent);
+            }
+            cell.appendChild(contentNode);
+            row.appendChild(cell);
+          });
+
+          tabBody.appendChild(row);
+      }
+
+      const fileLocation = "https://docs.google.com/spreadsheets/d/1q6yAQr_n4hvj4qc0KIuBJOjVNC_rQSg3GY_xwSQnCPg/export?format=csv&id=1q6yAQr_n4hvj4qc0KIuBJOjVNC_rQSg3GY_xwSQnCPg&gid=1869732403";
+
+      const processData = (data) => {
+        const rows = $.csv.toObjects(data);
+        addRow(rows[0], header=true);
+        rows.forEach((project) => addRow(project, false));
+        $('#standings_table').DataTable({ "order": [[ 6, "desc" ]],paging: false,searching: false, bInfo : false});
+      };
+
+      $(document).ready(() => {
+          $.ajax({
+              type: "GET",
+              url: fileLocation,
+              dataType: "text",
+              success: (data) => { processData(data); }
+           });
+      });
+
+    </script>
+
+
 
 </head>
 
@@ -70,7 +126,9 @@
       <div class="row">
         <div class="col-lg-10 mx-auto">
           <h2>How does it work?</h2>
-          <p class="lead mb-5">We will have 4 rounds, each with a different theme. Each round has a form for each team's asnwers. We will read the questions, and then send each team out into breakout rooms to discuss. Submit the form for the round before the 10 minute breakout is over. We will grade the answers, and the scores will show up in the table below. The winning team will receive 3 bags of pride!</p>
+          <p class="lead mb-5">First, we will break out into teams so everyone can introduce themselves to one another. During this time, come up with a team name, and designate one person on the team to be the designated form filler outer. Also, take a screenshot of your team on Zoom to send to us later!</p>
+          <p class="lead mb-5">For the trivia itself, we will have 4 rounds, each with a different theme. We will read the questions, and then send each team out into breakout rooms to discuss and decide on answers. You may want to have a pen and paper handy to jot down ideas while we are reading the questions (this will be especially true for the music round). The answer forms for each round can be found below. You have 10 minutes!</p>
+          <p class="lead mb-5">We will grade the answers, and the scores will show up in the table below. The winning team will each receive $15 UberEats gift cards. Second place gets a virtual medal. Third place gets virtual pride.</p>
           <a class="btn btn-dark btn-xl js-scroll-trigger" href="#services">On to the game!</a>
         </div>
       </div>
@@ -86,7 +144,7 @@
       </div>
       <div class="row">
         <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-          <a class="service-icon rounded-circle mx-auto mb-3" href="https://docs.google.com/forms/d/e/1FAIpQLSc-qDrLmNFrcre59qlR4Au76R5fsUuXlCh3fLPYudDd3fW-1g/viewform?usp=sf_link">
+          <a class="service-icon rounded-circle mx-auto mb-3" href="https://docs.google.com/forms/d/e/1FAIpQLSc-qDrLmNFrcre59qlR4Au76R5fsUuXlCh3fLPYudDd3fW-1g/viewform" target="blank">
             <i class="icon-ghost"></i>
           </a>
           <h4>
@@ -95,33 +153,34 @@
           <p class="text-faded mb-0">Round 1: Stuff you should know! 2 points per question.</p>
         </div>
         <div class="col-lg-3 col-md-6 mb-5 mb-lg-0">
-          <a class="service-icon rounded-circle mx-auto mb-3" href="https://docs.google.com/forms/d/e/1FAIpQLSc-qDrLmNFrcre59qlR4Au76R5fsUuXlCh3fLPYudDd3fW-1g/viewform?usp=sf_link">
+          <a class="service-icon rounded-circle mx-auto mb-3" href="https://docs.google.com/forms/d/e/1FAIpQLSc11FP5JL7LD_DicMib1eAKBUAbsNIBkUMFKeqiHShXFrTpTA/viewform" target="blank">
             <i class="icon-user-female"></i>
           </a>
           <h4>
-            <strong>About Anna</strong>
+            <strong>About Anna (kind of)</strong>
           </h4>
           <p class="text-faded mb-0">Round 2: How well do you know our best friend Anna? 2 points per question.</p>
         </div>
-        <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
-          <a class="service-icon rounded-circle mx-auto mb-3" href="https://docs.google.com/forms/d/e/1FAIpQLSc-qDrLmNFrcre59qlR4Au76R5fsUuXlCh3fLPYudDd3fW-1g/viewform?usp=sf_link">
-            <i class="icon-music-tone-alt"></i>
-          </a>
-          <h4>
-            <strong>Music</strong>
-          </h4>
-          <p class="text-faded mb-0">Round 3: Anna's favorite songs. 1 point for the artist; 1 point for the song name.
-            </p>
-        </div>
-        <div class="col-lg-3 col-md-6">
-          <a class="service-icon rounded-circle mx-auto mb-3" href="https://docs.google.com/forms/d/e/1FAIpQLSc-qDrLmNFrcre59qlR4Au76R5fsUuXlCh3fLPYudDd3fW-1g/viewform?usp=sf_link">
+              <div class="col-lg-3 col-md-6">
+          <a class="service-icon rounded-circle mx-auto mb-3" href="https://docs.google.com/forms/d/e/1FAIpQLSc2QDHpBs3pWkBVl1dLsi1IShJsboWiJcq8J-qsQXpJry5bLQ/viewform" target="blank">
             <i class="icon-mustache"></i>
           </a>
           <h4>
             <strong>General Knowledge 2</strong>
           </h4>
-          <p class="text-faded mb-0">Round 4: I moustache you a question...harder than the first time around. 3 points per question!</p>
+          <p class="text-faded mb-0">Round 3: I moustache you a question...harder than the first time around. 3 points per question!</p>
         </div>
+        <div class="col-lg-3 col-md-6 mb-5 mb-md-0">
+          <a class="service-icon rounded-circle mx-auto mb-3" href="https://docs.google.com/forms/d/e/1FAIpQLSfYzn77fJkyTdtVYaumUipWBNXWwdGrk-LMqRS5OSgE9-0rhg/viewform" target="blank">
+            <i class="icon-music-tone-alt"></i>
+          </a>
+          <h4>
+            <strong>Music</strong>
+          </h4>
+          <p class="text-faded mb-0">Round 4: Anna's favorite songs (or not). 1 point for the artist; 1 point for the song name.
+            </p>
+        </div>
+  
       </div>
     </div>
   </section>
@@ -132,75 +191,29 @@
   <section class="content-section" id="portfolio">
     <div class="container">
       <div class="content-section-heading text-center">
-        <h3 class="text-secondary mb-0">Portfolio</h3>
-        <h2 class="mb-5">Recent Projects</h2>
+        <h3 class="text-secondary mb-0">TRIVIA</h3>
+        <h2 class="mb-5">Scoring</h2>
       </div>
-      <div class="row no-gutters">
-        <div class="col-lg-6">
-          <a class="portfolio-item" href="#">
-            <span class="caption">
-              <span class="caption-content">
-                <h2>Stationary</h2>
-                <p class="mb-0">A yellow pencil with envelopes on a clean, blue backdrop!</p>
-              </span>
-            </span>
-            <img class="img-fluid" src="img/portfolio-1.jpg" alt="">
-          </a>
-        </div>
-        <div class="col-lg-6">
-          <a class="portfolio-item" href="#">
-            <span class="caption">
-              <span class="caption-content">
-                <h2>Ice Cream</h2>
-                <p class="mb-0">A dark blue background with a colored pencil, a clip, and a tiny ice cream cone!</p>
-              </span>
-            </span>
-            <img class="img-fluid" src="img/portfolio-2.jpg" alt="">
-          </a>
-        </div>
-        <div class="col-lg-6">
-          <a class="portfolio-item" href="#">
-            <span class="caption">
-              <span class="caption-content">
-                <h2>Strawberries</h2>
-                <p class="mb-0">Strawberries are such a tasty snack, especially with a little sugar on top!</p>
-              </span>
-            </span>
-            <img class="img-fluid" src="img/portfolio-3.jpg" alt="">
-          </a>
-        </div>
-        <div class="col-lg-6">
-          <a class="portfolio-item" href="#">
-            <span class="caption">
-              <span class="caption-content">
-                <h2>Workspace</h2>
-                <p class="mb-0">A yellow workspace with some scissors, pencils, and other objects.</p>
-              </span>
-            </span>
-            <img class="img-fluid" src="img/portfolio-4.jpg" alt="">
-          </a>
-        </div>
-      </div>
+       <div class="row no-gutters">
+            <div class="col">
+              <table id='standings_table' class="table cell-border table-bordered">
+                  <thead></thead>
+                  <tbody></tbody>
+              </table>        
+            </div>
+          </div>
     </div>
   </section>
 
   <!-- Call to Action -->
   <section class="content-section bg-primary text-white" id="donate">
     <div class="container text-center">
-      <h2 class="mb-4">The buttons below are impossible to resist...</h2>
-      <a href="#" class="btn btn-xl btn-light mr-4">Click Me!</a>
-      <a href="#" class="btn btn-xl btn-dark">Look at Me!</a>
+      <h2 class="mb-4">Thanks for joining!!</h2>
+      
     </div>
   </section>
 
-  <!-- Map -->
-  <section id="contact" class="map">
-    <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe>
-    <br />
-    <small>
-      <a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a>
-    </small>
-  </section>
+ 
 
   <!-- Footer -->
   <footer class="footer text-center">
@@ -232,8 +245,7 @@
   </a>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 
   <!-- Plugin JavaScript -->
   <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
